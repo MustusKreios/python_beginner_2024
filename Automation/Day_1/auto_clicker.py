@@ -3,39 +3,52 @@ import time
 
 # Constants
 WAIT_TIME = 3
+URL = "youtube.com"
+SEARCH_QUERY = "ninong ry"
 
-pg.hotkey('win', 'r')
-pg.write('chrome')
-pg.press('enter')
+# Coordinates
+COORDINATES = {
+    "chrome_icon": (365, 74),
+    "search_bar": (654, 186),
+    "video_play_button": (671, 813)
+}
 
+# Helper Functions
+def open_chrome():
+    """Opens Chrome via Run command."""
+    pg.hotkey('win', 'r')
+    pg.write('chrome')
+    pg.press('enter')
+    time.sleep(WAIT_TIME)
 
-COORDINATES = [ 
-    (1078 , 397),   
-    (321, 84)      
-]
-
-
-def search(url, query):
-    for x, y in COORDINATES:
-        pg.moveTo(x, y)
-        pg.click()
-        time.sleep(1)
-    
+def navigate_to_url(url):
+    """Navigates to the specified URL."""
+    pg.moveTo(*COORDINATES["chrome_icon"])
+    pg.click()
+    time.sleep(1)
     pg.write(url)
     pg.press('enter')
     time.sleep(WAIT_TIME)
 
-    pg.moveTo(654, 150)
+def search_query(query):
+    """Searches for the query in the search bar."""
+    pg.moveTo(*COORDINATES["search_bar"])
     pg.click()
     pg.write(query, interval=0.1)
     pg.press('enter')
 
 def play_video():
+    """Starts playing the video."""
     time.sleep(WAIT_TIME)
-    pg.moveTo(671, 813)
+    pg.moveTo(*COORDINATES["video_play_button"])
     pg.doubleClick()
 
+# Main Workflow
+def main():
+    open_chrome()
+    navigate_to_url(URL)
+    search_query(SEARCH_QUERY)
+    play_video()
 
-time.sleep(WAIT_TIME) 
-search("youtube.com", "best part")
-play_video()
+if __name__ == "__main__":
+    main()
